@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 061d7ef84bcdbef49bb7b9bf1ea8736e, type: 3}
+  m_Name: Stan
+  m_EditorClassIdentifier: 
+  Name: Pantfarts
+  Score: 0
+  Colour: {r: 1, g: 1, b: 0, a: 1}
+  bounceSound: {fileID: 8300000, guid: 9a3f0f16f859feb4f93376a44fb7f4b6, type: 3}
+  MyTurn: 0

@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3939132820980192651
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3939132820980192653}
+  - component: {fileID: 3939132820980192650}
+  m_Layer: 0
+  m_Name: GlobalControl
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3939132820980192653
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3939132820980192651}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3939132820980192650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3939132820980192651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66ca1e5e8a2230e40a946c1d41f164aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Players: []
+  NewGame: 0
+  CurrentPlayerIndex: 0
+  playerColours:
+  - {r: 0.9568628, g: 0.2627451, b: 0.21176472, a: 1}
+  - {r: 1, g: 0.59607846, b: 0, a: 1}
+  - {r: 1, g: 0.9215687, b: 0.23137257, a: 1}
+  - {r: 0.6117647, g: 0.8000001, b: 0.39607847, a: 1}
+  - {r: 0.29803923, g: 0.6862745, b: 0.3137255, a: 1}
+  - {r: 0.3019608, g: 0.7137255, b: 0.6745098, a: 1}
+  - {r: 0.011764707, g: 0.6627451, b: 0.9568628, a: 1}
+  - {r: 0.24705884, g: 0.31764707, b: 0.70980394, a: 1}
+  - {r: 0.6117647, g: 0.15294118, b: 0.6901961, a: 1}
+  - {r: 0.8078432, g: 0.5764706, b: 0.8470589, a: 1}
+  - {r: 0.9725491, g: 0.73333335, b: 0.81568635, a: 1}
+  - {r: 0.9254902, g: 0.2509804, b: 0.56303746, a: 1}
+  playerNames:
+  - ooga booga
+  - Gregorny
+  - Wiggly Woo
+  - King pleeb
+  - Mango juice
+  - squak
+  - The Globule
+  - big crunch
+  - Smoothness
+  - Jason Weinkle
+  - lil baby
+  - uwu mongrel
+  - teeth
+  - froggy
