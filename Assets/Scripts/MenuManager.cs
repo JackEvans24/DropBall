@@ -100,9 +100,15 @@ public class MenuManager : MonoBehaviour
     public void StartGame()
     {
         GlobalControl.Instance.NewGame = true;
-        GlobalControl.Instance.CurrentPlayerIndex = Random.Range(0, GlobalControl.Instance.Players.Count);
 
-        SceneManager.LoadScene((int)Scenes.BoardOne);
+        GlobalControl.LoadScene(Scenes.BoardOne);
+    }
+
+    public void StartSuddenDeath()
+    {
+        GlobalControl.Instance.NewGame = true;
+
+        GlobalControl.LoadScene(Scenes.BoardOne_SuddenDeath);
     }
 
     public void QuitGame()

@@ -1,5 +1,6 @@
 ﻿public enum Scenes
 {
     MainMenu,
-    BoardOne
+    BoardOne,
+    BoardOne_SuddenDeath
 }

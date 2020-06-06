@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GlobalControl : MonoBehaviour
 {
@@ -29,10 +30,9 @@ public class GlobalControl : MonoBehaviour
     private void CreateStandardPlayers()
     {
         Players = new List<Player>();
-        for (int i = 0; i < 4; i++)
-        {
+
+        for (var i = 0; i < 2; i++)
             Players.Add(CreatePlayer(string.Empty));
-        }
     }
 
     public static Player CreatePlayer(string name)
@@ -55,5 +55,10 @@ public class GlobalControl : MonoBehaviour
     {
         var availableColours = playerColours.Where(c => !Players.Any(p => p.Colour == c));
         return availableColours.ElementAt(Random.Range(0, availableColours.Count()));
+    }
+
+    public static void LoadScene(Scenes scene)
+    {
+        SceneManager.LoadScene((int)scene);
     }
 }

@@ -7,30 +7,43 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject token;
+    protected GameObject token;
     [SerializeField]
-    private Transform tokenSpawn;
+    protected Transform tokenSpawn;
     [SerializeField]
-    private GameObject scoreTag;
+    protected GameObject scoreTag;
     [SerializeField]
-    private GameObject overlay;
+    protected GameObject overlay;
 
     [SerializeField]
-    private float scoreX;
+    protected float scoreX;
     [SerializeField]
-    private float scoreY;
+    protected float scoreY;
     [SerializeField]
-    private float scoreYGap;
+    protected float scoreYGap;
 
-    private List<Player> players;
-    private int currentPlayerIndex = 0;
+    protected List<Player> players;
+    protected int currentPlayerIndex = 0;
 
-    private bool tokenInPlay;
+    protected bool tokenInPlay;
 
-    void Start()
+    protected void Start()
     {
-        players = GlobalControl.Instance.Players;
+        players = GlobalControl.Instance.Players.ToList();
+
+        if (GlobalControl.Instance.NewGame) {
+            GlobalControl.Instance.CurrentPlayerIndex = Random.Range(0, players.Count);
+        }
         currentPlayerIndex = GlobalControl.Instance.CurrentPlayerIndex;
+
+        CreateTags();
+
+        players[currentPlayerIndex].MyTurn = true;
+        GlobalControl.Instance.NewGame = false;
+    }
+
+    protected void CreateTags()
+    {
         var newGame = GlobalControl.Instance.NewGame;
 
         for (var i = 0; i < players.Count; i++)
@@ -46,11 +59,9 @@ public class GameManager : MonoBehaviour
             var tag = CreateTag(i);
             tag.GetComponent<ScoreTag>().player = player;
         }
-
-        players[currentPlayerIndex].MyTurn = true;
     }
 
-    private GameObject CreateTag(int playerIndex)
+    protected GameObject CreateTag(int playerIndex)
     {
         var instPos = new Vector3(scoreX, scoreY - (playerIndex * scoreYGap), 0);
         return GameObject.Instantiate(scoreTag, instPos, Quaternion.identity);
@@ -87,27 +98,30 @@ public class GameManager : MonoBehaviour
         NextPlayerTurn();
     }
 
-    public void NextPlayerTurn()
+    public virtual void NextPlayerTurn()
     {
-        foreach (var player in players)
-        {
-            player.MyTurn = false;
-        }
-
         currentPlayerIndex++;
+        UpdateTurnAndIndex();
+
+        ShowOverlay();
+    }
+
+    protected void UpdateTurnAndIndex()
+    {
         if (currentPlayerIndex >= players.Count)
             currentPlayerIndex = 0;
 
         GlobalControl.Instance.CurrentPlayerIndex = currentPlayerIndex;
 
+        foreach (var player in players)
+        {
+            player.MyTurn = false;
+        }
         players[currentPlayerIndex].MyTurn = true;
-
-        StartCoroutine("ShowOverlayAfterDelay");
     }
 
-    private IEnumerator ShowOverlayAfterDelay()
+    protected void ShowOverlay()
     {
-        yield return new WaitForSecondsRealtime(1);
         overlay.SetActive(true);
     }
 
@@ -121,6 +135,13 @@ public class GameManager : MonoBehaviour
         Gizmos.DrawWireSphere(new Vector3(scoreX, scoreY, 0), 1f);
     }
 
+    public void StartSuddenDeath()
+    {
+        GlobalControl.Instance.NewGame = true;
+
+        GlobalControl.LoadScene(Scenes.BoardOne_SuddenDeath);
+    }
+
     public void Quit()
     {
         for (var i = 0; i < players.Count; i++)
@@ -131,6 +152,6 @@ public class GameManager : MonoBehaviour
             player.MyTurn = false;
         }
 
-        SceneManager.LoadScene((int)Scenes.MainMenu);
+        GlobalControl.LoadScene(Scenes.MainMenu);
     }
 }
