@@ -18,6 +18,7 @@ public class SuddenDeathManager : GameManager
     private Text roundsText;
 
     private bool gameOver;
+    private bool backToMenu;
     [SerializeField]
     private GameObject winnerCanvas;
     [SerializeField]
@@ -36,7 +37,7 @@ public class SuddenDeathManager : GameManager
     private void Update()
     {
         if (gameOver && Input.GetButton("Jump"))
-            GlobalControl.LoadScene(Scenes.MainMenu);
+            BackToMenu();
     }
 
     new public void Play()
@@ -121,8 +122,6 @@ public class SuddenDeathManager : GameManager
         {
             var player = players[i];
 
-            Debug.Log($"Player: {i}, Answer: {answers[player.Id]}");
-
             if (answers[player.Id])
                 continue;
 
@@ -151,6 +150,16 @@ public class SuddenDeathManager : GameManager
         winnerText.color = winner.Colour;
 
         winnerCanvas.SetActive(true);
+    }
+
+    private void BackToMenu()
+    {
+        if (backToMenu)
+            return;
+
+        backToMenu = true;
+
+        FindObjectOfType<LevelLoader>().LoadScene(Scenes.MainMenu);
     }
 
     void OnDrawGizmosSelected()

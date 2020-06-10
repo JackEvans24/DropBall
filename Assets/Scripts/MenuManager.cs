@@ -101,14 +101,14 @@ public class MenuManager : MonoBehaviour
     {
         GlobalControl.Instance.NewGame = true;
 
-        GlobalControl.LoadScene(Scenes.BoardOne);
+        FindObjectOfType<LevelLoader>().LoadScene(Scenes.BoardOne);
     }
 
     public void StartSuddenDeath()
     {
         GlobalControl.Instance.NewGame = true;
 
-        GlobalControl.LoadScene(Scenes.BoardOne_SuddenDeath);
+        FindObjectOfType<LevelLoader>().LoadScene(Scenes.BoardOne_SuddenDeath);
     }
 
     public void QuitGame()

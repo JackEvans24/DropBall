@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -55,6 +56,12 @@ public class GlobalControl : MonoBehaviour
     {
         var availableColours = playerColours.Where(c => !Players.Any(p => p.Colour == c));
         return availableColours.ElementAt(Random.Range(0, availableColours.Count()));
+    }
+
+    public static IEnumerator LoadSceneAfter(Scenes scene, float seconds)
+    {
+        yield return new WaitForSecondsRealtime(seconds);
+        LoadScene(scene);
     }
 
     public static void LoadScene(Scenes scene)

@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
     {
         GlobalControl.Instance.NewGame = true;
 
-        GlobalControl.LoadScene(Scenes.BoardOne_SuddenDeath);
+        FindObjectOfType<LevelLoader>().LoadScene(Scenes.BoardOne_SuddenDeath);
     }
 
     public void Quit()
@@ -152,6 +152,6 @@ public class GameManager : MonoBehaviour
             player.MyTurn = false;
         }
 
-        GlobalControl.LoadScene(Scenes.MainMenu);
+        FindObjectOfType<LevelLoader>().LoadScene(Scenes.MainMenu);
     }
 }
