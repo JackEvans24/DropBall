@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class SuddenDeathManager : GameManager
 {
-    private int startingPlayerIndex;
     private Dictionary<Guid, bool> answers;
 
     [SerializeField]
@@ -28,7 +27,6 @@ public class SuddenDeathManager : GameManager
     {
         base.Start();
 
-        startingPlayerIndex = currentPlayerIndex;
         answers = new Dictionary<Guid, bool>();
 
         UpdateRoundsText();
@@ -65,7 +63,7 @@ public class SuddenDeathManager : GameManager
 
     private void CheckAnswers()
     {
-        if (currentPlayerIndex != startingPlayerIndex || answers.Count != players.Count)
+        if (currentPlayerIndex != 0 || answers.Count != players.Count)
             return;
 
         rounds++;
@@ -129,9 +127,6 @@ public class SuddenDeathManager : GameManager
 
             if (currentPlayerIndex > i)
                 currentPlayerIndex--;
-
-            if (startingPlayerIndex > i)
-                startingPlayerIndex--;
 
             i--;
         }

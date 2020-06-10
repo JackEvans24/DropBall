@@ -32,7 +32,8 @@ public class GameManager : MonoBehaviour
         players = GlobalControl.Instance.Players.ToList();
 
         if (GlobalControl.Instance.NewGame) {
-            GlobalControl.Instance.CurrentPlayerIndex = Random.Range(0, players.Count);
+            ShufflePlayers();
+            GlobalControl.Instance.CurrentPlayerIndex = 0;
         }
         currentPlayerIndex = GlobalControl.Instance.CurrentPlayerIndex;
 
@@ -40,6 +41,22 @@ public class GameManager : MonoBehaviour
 
         players[currentPlayerIndex].MyTurn = true;
         GlobalControl.Instance.NewGame = false;
+    }
+
+    private void ShufflePlayers()
+    {
+        var shuffledPlayers = new List<Player>();
+
+        while (players.Any())
+        {
+            var randomPlayerIndex = Random.Range(0, players.Count);
+
+            shuffledPlayers.Add(players[randomPlayerIndex]);
+            players.RemoveAt(randomPlayerIndex);
+        }
+
+        GlobalControl.Instance.Players = shuffledPlayers;
+        players = shuffledPlayers.ToList();
     }
 
     protected void CreateTags()
