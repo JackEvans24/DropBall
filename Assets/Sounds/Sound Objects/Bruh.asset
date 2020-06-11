@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a890bbd8ba94df74b8104e852bc65ea6, type: 3}
   m_Name: Bruh
   m_EditorClassIdentifier: 
-  DisplayName: 
-  Sound: {fileID: 0}
+  DisplayName: bruh
+  Sound: {fileID: 8300000, guid: 1504ff6414d93444eb489d2329be5f10, type: 3}

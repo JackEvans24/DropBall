@@ -10651,6 +10651,11 @@ PrefabInstance:
       propertyPath: color.b
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2684597722728704993, guid: 77b66e1fb389b2c4a95776f7745fbb69,
+        type: 3}
+      propertyPath: hitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: cc0433c290e90d2458f098e231a799bf, type: 3}
     - target: {fileID: 2684597722728704999, guid: 77b66e1fb389b2c4a95776f7745fbb69,
         type: 3}
       propertyPath: m_LocalPosition.x

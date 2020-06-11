@@ -20,6 +20,10 @@ public class Token : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (bounceSound != null)
-            audioSource.PlayOneShot(bounceSound);
+        {
+            audioSource.Stop();
+            audioSource.clip = bounceSound;
+            audioSource.Play();
+        }
     }
 }

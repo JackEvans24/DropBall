@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a890bbd8ba94df74b8104e852bc65ea6, type: 3}
-  m_Name: OBounce1
+  m_Name: Default1
   m_EditorClassIdentifier: 
-  DisplayName: Bounce 1
+  DisplayName: Default 1
   Sound: {fileID: 8300000, guid: 9a3f0f16f859feb4f93376a44fb7f4b6, type: 3}
