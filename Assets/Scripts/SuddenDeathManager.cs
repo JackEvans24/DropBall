@@ -154,7 +154,7 @@ public class SuddenDeathManager : GameManager
 
         backToMenu = true;
 
-        FindObjectOfType<LevelLoader>().LoadScene(Scenes.MainMenu);
+        GlobalControl.LoadScene(Scenes.MainMenu);
     }
 
     void OnDrawGizmosSelected()

@@ -10,8 +10,11 @@ public class GlobalControl : MonoBehaviour
     public List<Player> Players;
     public bool NewGame;
     public int CurrentPlayerIndex;
+
+    [Header("Player options")]
     public List<Color> playerColours;
-    public List<string> playerNames;
+    [SerializeField]
+    private List<string> playerNames;
 
     void Awake ()
     {
@@ -22,7 +25,10 @@ public class GlobalControl : MonoBehaviour
 
             CreateStandardPlayers();
         }
-        else if (Instance != this)
+
+        Instance.GetComponentInChildren<LevelLoader>().EndTransition();
+
+        if (Instance != this)
         {
             Destroy (gameObject);
         }
@@ -58,14 +64,17 @@ public class GlobalControl : MonoBehaviour
         return availableColours.ElementAt(Random.Range(0, availableColours.Count()));
     }
 
-    public static IEnumerator LoadSceneAfter(Scenes scene, float seconds)
-    {
-        yield return new WaitForSecondsRealtime(seconds);
-        LoadScene(scene);
-    }
-
     public static void LoadScene(Scenes scene)
     {
+        var levelLoader = Instance.GetComponentInChildren<LevelLoader>();
+        levelLoader.StartTransition();
+
+        Instance.StartCoroutine(LoadSceneAfter(scene, levelLoader.transitionDuration));
+    }
+
+    private static IEnumerator LoadSceneAfter(Scenes scene, float seconds)
+    {
+        yield return new WaitForSecondsRealtime(seconds);
         SceneManager.LoadScene((int)scene);
     }
 }

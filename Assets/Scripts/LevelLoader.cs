@@ -8,16 +8,14 @@ public class LevelLoader : MonoBehaviour
     private Transform overlay;
     [SerializeField]
     private float xOffset;
-    [SerializeField]
-    private float transitionDuration;
+    public float transitionDuration;
     [SerializeField]
     private LeanTweenType animationType;
 
     private float startXPos;
     private bool loadNewScene;
 
-    // Start is called before the first frame update
-    void Start()
+    public void EndTransition()
     {
         startXPos = overlay.position.x;
         loadNewScene = false;
@@ -25,7 +23,7 @@ public class LevelLoader : MonoBehaviour
         LeanTween.moveX(overlay.gameObject, startXPos - xOffset, transitionDuration).setEase(animationType);
     }
 
-    public void LoadScene(Scenes scene)
+    public void StartTransition()
     {
         if (loadNewScene)
             return;
@@ -35,7 +33,5 @@ public class LevelLoader : MonoBehaviour
         overlay.position = new Vector3(startXPos + xOffset, overlay.position.y, overlay.position.z);
 
         LeanTween.moveX(overlay.gameObject, startXPos, transitionDuration).setEase(animationType);
-
-        StartCoroutine(GlobalControl.LoadSceneAfter(scene, transitionDuration));
     }
 }
