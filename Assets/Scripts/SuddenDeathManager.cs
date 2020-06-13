@@ -50,8 +50,6 @@ public class SuddenDeathManager : GameManager
         base.FinishTurn(pointsAdded);
 
         CheckAnswers();
-
-        turnController.UpdateTurnAndIndex();
     }
 
     new public void Incorrect()
@@ -152,8 +150,7 @@ public class SuddenDeathManager : GameManager
 
             players.RemoveAt(i);
 
-            // if (state.CurrentPlayerIndex >= i)
-            //     state.CurrentPlayerIndex--;
+            turnController.UpdateTurnAndIndex();
 
             i--;
         }
