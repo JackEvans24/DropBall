@@ -44,7 +44,7 @@ public class Bucket : MonoBehaviour
         StartCoroutine("ShowParticles");
         GameObject.Destroy(other.gameObject);
 
-        gameManager.UpdateScore(points);
+        gameManager.FinishTurn(points);
     }
 
     IEnumerator ShowParticles()

@@ -30,17 +30,21 @@ public class GameManager : MonoBehaviour
     protected void Start()
     {
         this.turnController = GlobalControl.Instance.turnController;
-        this.state = turnController.CurrentState.AsNewState();
+        this.state = turnController.State;
 
         if (GlobalControl.Instance.NewGame) {
             state.ResetGame();
             ShufflePlayers();
+
+            turnController.NewGame(this.state);
         }
 
         CreateTags();
 
         state.CurrentPlayer.MyTurn = true;
         GlobalControl.Instance.NewGame = false;
+
+        turnController.UpdateUndoRedoButtons();
     }
 
     private void ShufflePlayers()
@@ -105,21 +109,15 @@ public class GameManager : MonoBehaviour
         SpawnToken(tokenSpawn.position);
     }
 
-    public void UpdateScore(int points)
+    public virtual void FinishTurn(int pointsAdded)
     {
         tokenInPlay = false;
 
-        state.CurrentPlayer.AddPoints(points);
-
-        NextPlayerTurn();
-    }
-
-    public virtual void NextPlayerTurn()
-    {
-        turnController.NextTurn(this.state);
-        this.state = turnController.CurrentState.AsNewState();
+        turnController.NextTurn(pointsAdded);
 
         ShowOverlay();
+
+        turnController.UpdateUndoRedoButtons();
     }
 
     protected void ShowOverlay()
@@ -129,7 +127,19 @@ public class GameManager : MonoBehaviour
 
     public void Incorrect()
     {
-        this.UpdateScore(-2);
+        this.FinishTurn(-2);
+    }
+
+    public virtual void Undo()
+    {
+        if (turnController.CanUndo())
+            turnController.Undo();
+    }
+
+    public virtual void Redo()
+    {
+        if (turnController.CanRedo())
+            turnController.Redo();
     }
 
     void OnDrawGizmosSelected()
@@ -145,9 +155,7 @@ public class GameManager : MonoBehaviour
 
     public void Quit()
     {
-        turnController.Clear();
-        state.ResetGame();
-        turnController.CurrentState = state;
+        turnController.EndGame();
 
         GlobalControl.LoadScene(Scenes.MainMenu);
     }

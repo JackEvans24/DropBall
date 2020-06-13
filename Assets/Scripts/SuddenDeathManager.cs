@@ -45,24 +45,53 @@ public class SuddenDeathManager : GameManager
         base.Play();
     }
 
-    public override void NextPlayerTurn()
+    public override void FinishTurn(int pointsAdded)
     {
+        base.FinishTurn(pointsAdded);
+
         CheckAnswers();
 
-        if (!gameOver)
-            base.NextPlayerTurn();
+        turnController.UpdateTurnAndIndex();
     }
 
     new public void Incorrect()
     {
         answers[state.CurrentPlayer.Id] = false;
 
-        NextPlayerTurn();
+        FinishTurn(0);
+    }
+
+    public override void Undo()
+    {
+        if (this.turnController.CanUndo() && state.CurrentPlayerIndex == 0)
+        {
+            rounds--;
+            UpdateRoundsText();
+        }
+
+        base.Undo();
+
+        RemoveTags();
+        CreateTags();
+    }
+
+    public override void Redo()
+    {
+        if (this.turnController.CanRedo() && state.CurrentPlayerIndex == state.Players.Count - 1)
+        {
+            rounds++;
+            UpdateRoundsText();
+        }
+
+        base.Redo();
+
+        RemoveTags();
+        CreateTags();
     }
 
     private void CheckAnswers()
     {
-        if (state.CurrentPlayerIndex + 1 < state.Players.Count || answers.Count != state.Players.Count)
+        if (state.CurrentPlayerIndex != 0 || answers.Count != state.Players.Count)
             return;
 
         rounds++;
@@ -122,6 +151,9 @@ public class SuddenDeathManager : GameManager
                 continue;
 
             players.RemoveAt(i);
+
+            // if (state.CurrentPlayerIndex >= i)
+            //     state.CurrentPlayerIndex--;
 
             i--;
         }

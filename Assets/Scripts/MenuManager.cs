@@ -27,7 +27,7 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
-        this.state = GlobalControl.Instance.turnController.CurrentState.AsNewState();
+        this.state = GlobalControl.Instance.turnController.State;
 
         CreatePlayerLabels();
     }
@@ -102,14 +102,14 @@ public class MenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        GlobalControl.Instance.turnController.CurrentState = this.state;
+        GlobalControl.Instance.turnController.State = this.state;
         GlobalControl.Instance.NewGame = true;
         GlobalControl.LoadScene(Scenes.BoardOne);
     }
 
     public void StartSuddenDeath()
     {
-        GlobalControl.Instance.turnController.CurrentState = this.state;
+        GlobalControl.Instance.turnController.State = this.state;
         GlobalControl.Instance.NewGame = true;
         GlobalControl.LoadScene(Scenes.BoardOne_SuddenDeath);
     }

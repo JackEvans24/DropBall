@@ -40,7 +40,7 @@ public class GlobalControl : MonoBehaviour
     private void CreateStandardPlayers()
     {
         var players = new List<Player>();
-        turnController.CurrentState = new GameState() { Players = players };
+        turnController.State = new GameState() { Players = players };
 
         for (var i = 0; i < 2; i++)
             players.Add(CreatePlayer(string.Empty));
@@ -58,13 +58,13 @@ public class GlobalControl : MonoBehaviour
 
     private string GetName()
     {
-        var availableNames = playerNames.Where(n => !turnController.CurrentState.Players.Any(p => p.Name == n));
+        var availableNames = playerNames.Where(n => !turnController.State.Players.Any(p => p.Name == n));
         return availableNames.ElementAt(Random.Range(0, availableNames.Count()));
     }
 
     private Color GetColor()
     {
-        var availableColours = playerColours.Where(c => !turnController.CurrentState.Players.Any(p => p.Colour == c));
+        var availableColours = playerColours.Where(c => !turnController.State.Players.Any(p => p.Colour == c));
         return availableColours.ElementAt(Random.Range(0, availableColours.Count()));
     }
 

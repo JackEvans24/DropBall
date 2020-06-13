@@ -16,15 +16,6 @@ public class GameState
         get => this.Players[this.CurrentPlayerIndex];
     }
 
-    public GameState AsNewState()
-    {
-        return new GameState()
-        {
-            CurrentPlayerIndex = this.CurrentPlayerIndex,
-            Players = this.Players.ToList()
-        };
-    }
-
     public void ResetGame()
     {
         CurrentPlayerIndex = 0;
