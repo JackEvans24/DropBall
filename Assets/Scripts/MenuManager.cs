@@ -22,9 +22,13 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private int maxPlayers;
 
+    private GameState state;
+
 
     void Start()
     {
+        this.state = GlobalControl.Instance.turnController.CurrentState.AsNewState();
+
         CreatePlayerLabels();
     }
 
@@ -32,7 +36,7 @@ public class MenuManager : MonoBehaviour
     {
         var i = 0;
 
-        foreach (var player in GlobalControl.Instance.Players)
+        foreach (var player in this.state.Players)
         {
             var editPlayer = editPlayerTransform.GetComponent<EditPlayer>();
             editPlayer.player = player;
@@ -84,27 +88,28 @@ public class MenuManager : MonoBehaviour
     private void AddPlayer()
     {
         var newPlayer = GlobalControl.CreatePlayer(null);
-        GlobalControl.Instance.Players.Add(newPlayer);
+        this.state.Players.Add(newPlayer);
 
         RefreshPlayerLabels();
     }
 
     public void RemovePlayer(Player player)
     {
-        GlobalControl.Instance.Players =
-            GlobalControl.Instance.Players.Where(p => p.Id != player.Id).ToList();
+        this.state.Players = this.state.Players.Where(p => p.Id != player.Id).ToList();
 
         RefreshPlayerLabels();
     }
 
     public void StartGame()
     {
+        GlobalControl.Instance.turnController.CurrentState = this.state;
         GlobalControl.Instance.NewGame = true;
         GlobalControl.LoadScene(Scenes.BoardOne);
     }
 
     public void StartSuddenDeath()
     {
+        GlobalControl.Instance.turnController.CurrentState = this.state;
         GlobalControl.Instance.NewGame = true;
         GlobalControl.LoadScene(Scenes.BoardOne_SuddenDeath);
     }

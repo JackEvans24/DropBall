@@ -38,38 +38,37 @@ public class SuddenDeathManager : GameManager
             BackToMenu();
     }
 
-    new public void Play()
+    public override void Play()
     {
-        var player = players[currentPlayerIndex];
-        answers[player.Id] = true;
+        answers[state.CurrentPlayer.Id] = true;
 
         base.Play();
     }
 
     public override void NextPlayerTurn()
     {
-        base.NextPlayerTurn();
-
         CheckAnswers();
+
+        if (!gameOver)
+            base.NextPlayerTurn();
     }
 
     new public void Incorrect()
     {
-        var player = players[currentPlayerIndex];
-        answers[player.Id] = false;
+        answers[state.CurrentPlayer.Id] = false;
 
         NextPlayerTurn();
     }
 
     private void CheckAnswers()
     {
-        if (currentPlayerIndex != 0 || answers.Count != players.Count)
+        if (state.CurrentPlayerIndex + 1 < state.Players.Count || answers.Count != state.Players.Count)
             return;
 
         rounds++;
         UpdateRoundsText();
 
-        if (GameComplete())
+        if (IsGameComplete())
         {
             ShowWinner();
             return;
@@ -82,15 +81,13 @@ public class SuddenDeathManager : GameManager
 
         RemoveIncorrectPlayers();
 
-        if (players.Count == 1)
+        if (state.Players.Count == 1)
         {
             ShowWinner();
             return;
         }
 
         CreateTags();
-
-        UpdateTurnAndIndex();
     }
 
     private void UpdateRoundsText()
@@ -104,18 +101,19 @@ public class SuddenDeathManager : GameManager
             GameObject.Destroy(tag.gameObject);
     }
 
-    private bool GameComplete()
+    private bool IsGameComplete()
     {
         if (rounds < maxRounds)
             return false;
 
-        var topScore = players.OrderByDescending(p => p.Score).First().Score;
+        var topScore = state.Players.OrderByDescending(p => p.Score).First().Score;
 
-        return players.Count(p => p.Score == topScore) == 1;
+        return state.Players.Count(p => p.Score == topScore) == 1;
     }
 
     private void RemoveIncorrectPlayers()
     {
+        var players = state.Players;
         for (var i = 0; i < players.Count; i++)
         {
             var player = players[i];
@@ -123,10 +121,7 @@ public class SuddenDeathManager : GameManager
             if (answers[player.Id])
                 continue;
 
-            this.players.RemoveAt(i);
-
-            if (currentPlayerIndex > i)
-                currentPlayerIndex--;
+            players.RemoveAt(i);
 
             i--;
         }
@@ -134,12 +129,12 @@ public class SuddenDeathManager : GameManager
         answers.Clear();
     }
 
-    private void ShowWinner()
+    protected void ShowWinner()
     {
         overlay.SetActive(false);
 
         gameOver = true;
-        var winner = players.OrderByDescending(p => p.Score).First();
+        var winner = state.Players.OrderByDescending(p => p.Score).First();
 
         winnerText.text = winner.Name;
         winnerText.color = winner.Colour;
@@ -154,11 +149,6 @@ public class SuddenDeathManager : GameManager
 
         backToMenu = true;
 
-        GlobalControl.LoadScene(Scenes.MainMenu);
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawWireSphere(new Vector3(scoreX, scoreY, 0), 1f);
+        this.Quit();
     }
 }

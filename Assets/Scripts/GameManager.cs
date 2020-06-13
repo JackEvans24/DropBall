@@ -22,30 +22,31 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     protected float scoreYGap;
 
-    protected List<Player> players;
-    protected int currentPlayerIndex = 0;
+    protected TurnController turnController;
+    protected GameState state;
 
     protected bool tokenInPlay;
 
     protected void Start()
     {
-        players = GlobalControl.Instance.Players.ToList();
+        this.turnController = GlobalControl.Instance.turnController;
+        this.state = turnController.CurrentState.AsNewState();
 
         if (GlobalControl.Instance.NewGame) {
+            state.ResetGame();
             ShufflePlayers();
-            GlobalControl.Instance.CurrentPlayerIndex = 0;
         }
-        currentPlayerIndex = GlobalControl.Instance.CurrentPlayerIndex;
 
         CreateTags();
 
-        players[currentPlayerIndex].MyTurn = true;
+        state.CurrentPlayer.MyTurn = true;
         GlobalControl.Instance.NewGame = false;
     }
 
     private void ShufflePlayers()
     {
         var shuffledPlayers = new List<Player>();
+        var players = state.Players;
 
         while (players.Any())
         {
@@ -55,13 +56,13 @@ public class GameManager : MonoBehaviour
             players.RemoveAt(randomPlayerIndex);
         }
 
-        GlobalControl.Instance.Players = shuffledPlayers;
-        players = shuffledPlayers.ToList();
+        state.Players = shuffledPlayers;
     }
 
     protected void CreateTags()
     {
         var newGame = GlobalControl.Instance.NewGame;
+        var players = state.Players;
 
         for (var i = 0; i < players.Count; i++)
         {
@@ -89,17 +90,16 @@ public class GameManager : MonoBehaviour
         if (tokenInPlay)
             return;
 
-        var currentPlayer = players[currentPlayerIndex];
         var tokenScript = token.GetComponent<Token>();
-        tokenScript.tokenColor = currentPlayer.Colour;
-        tokenScript.bounceSound = currentPlayer.bounceSound?.Sound;
+        tokenScript.tokenColor = state.CurrentPlayer.Colour;
+        tokenScript.bounceSound = state.CurrentPlayer.bounceSound?.Sound;
 
         tokenInPlay = true;
 
         GameObject.Instantiate(token, spawnPos, Quaternion.identity);
     }
 
-    public void Play()
+    public virtual void Play()
     {
         overlay.SetActive(false);
         SpawnToken(tokenSpawn.position);
@@ -109,32 +109,17 @@ public class GameManager : MonoBehaviour
     {
         tokenInPlay = false;
 
-        var currentPlayer = players[currentPlayerIndex];
-        currentPlayer.AddPoints(points);
+        state.CurrentPlayer.AddPoints(points);
 
         NextPlayerTurn();
     }
 
     public virtual void NextPlayerTurn()
     {
-        currentPlayerIndex++;
-        UpdateTurnAndIndex();
+        turnController.NextTurn(this.state);
+        this.state = turnController.CurrentState.AsNewState();
 
         ShowOverlay();
-    }
-
-    protected void UpdateTurnAndIndex()
-    {
-        if (currentPlayerIndex >= players.Count)
-            currentPlayerIndex = 0;
-
-        GlobalControl.Instance.CurrentPlayerIndex = currentPlayerIndex;
-
-        foreach (var player in players)
-        {
-            player.MyTurn = false;
-        }
-        players[currentPlayerIndex].MyTurn = true;
     }
 
     protected void ShowOverlay()
@@ -160,13 +145,9 @@ public class GameManager : MonoBehaviour
 
     public void Quit()
     {
-        for (var i = 0; i < players.Count; i++)
-        {
-            var player = players[i];
-
-            player.Score = 0;
-            player.MyTurn = false;
-        }
+        turnController.Clear();
+        state.ResetGame();
+        turnController.CurrentState = state;
 
         GlobalControl.LoadScene(Scenes.MainMenu);
     }
