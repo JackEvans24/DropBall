@@ -13,6 +13,8 @@ public class GlobalControl : MonoBehaviour
     public bool NewGame;
 
     [Header("Player options")]
+    [SerializeField]
+    private int startingPlayerCount = 2;
     public List<Color> playerColours;
     [SerializeField]
     private List<string> playerNames;
@@ -42,7 +44,7 @@ public class GlobalControl : MonoBehaviour
         var players = new List<Player>();
         turnController.State = new GameState() { Players = players };
 
-        for (var i = 0; i < 2; i++)
+        for (var i = 0; i < startingPlayerCount; i++)
             players.Add(CreatePlayer(string.Empty));
     }
 

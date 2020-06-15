@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class GameState
 {
     public List<Player> Players;
     public int CurrentPlayerIndex;
+    public Dictionary<Guid, bool> Answers;
 
     public GameState()
     {
@@ -19,10 +21,13 @@ public class GameState
     public void ResetGame()
     {
         CurrentPlayerIndex = 0;
+
         foreach (var player in Players)
         {
             player.Score = 0;
             player.MyTurn = false;
         }
+
+        this.Answers = null;
     }
 }

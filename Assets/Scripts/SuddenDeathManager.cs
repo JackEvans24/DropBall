@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 public class SuddenDeathManager : GameManager
 {
-    private Dictionary<Guid, bool> answers;
-
     [SerializeField]
     private int maxRounds;
     private int rounds;
@@ -27,7 +25,7 @@ public class SuddenDeathManager : GameManager
     {
         base.Start();
 
-        answers = new Dictionary<Guid, bool>();
+        state.Answers = new Dictionary<Guid, bool>();
 
         UpdateRoundsText();
     }
@@ -40,7 +38,7 @@ public class SuddenDeathManager : GameManager
 
     public override void Play()
     {
-        answers[state.CurrentPlayer.Id] = true;
+        state.Answers[state.CurrentPlayer.Id] = true;
 
         base.Play();
     }
@@ -54,7 +52,7 @@ public class SuddenDeathManager : GameManager
 
     new public void Incorrect()
     {
-        answers[state.CurrentPlayer.Id] = false;
+        state.Answers[state.CurrentPlayer.Id] = false;
 
         FinishTurn(0);
     }
@@ -89,7 +87,7 @@ public class SuddenDeathManager : GameManager
 
     private void CheckAnswers()
     {
-        if (state.CurrentPlayerIndex != 0 || answers.Count != state.Players.Count)
+        if (state.CurrentPlayerIndex != 0 || state.Answers.Count != state.Players.Count)
             return;
 
         rounds++;
@@ -101,7 +99,7 @@ public class SuddenDeathManager : GameManager
             return;
         }
 
-        if (answers.All(a => a.Value) || answers.All(a => !a.Value))
+        if (state.Answers.All(a => a.Value) || state.Answers.All(a => !a.Value))
             return;
 
         RemoveTags();
@@ -145,7 +143,7 @@ public class SuddenDeathManager : GameManager
         {
             var player = players[i];
 
-            if (answers[player.Id])
+            if (state.Answers[player.Id])
                 continue;
 
             players.RemoveAt(i);
@@ -155,7 +153,7 @@ public class SuddenDeathManager : GameManager
             i--;
         }
 
-        answers.Clear();
+        state.Answers.Clear();
     }
 
     protected void ShowWinner()

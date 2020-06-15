@@ -7,17 +7,18 @@ using UnityEngine.UI;
 
 public class TurnController
 {
-    public struct UndoRedoData
+    public struct TurnData
     {
         public Guid[] PlayerIds;
         public Guid CurrentPlayerId;
-        public int CurrentPlayerPoints;
+        public Dictionary<Guid, int> PlayerPoints;
+        public Dictionary<Guid, bool> Answers;
     }
 
     public GameState State;
     public List<Player> OriginalPlayers;
-    protected Stack<UndoRedoData> undoStack;
-    protected Stack<UndoRedoData> redoStack;
+    protected Stack<TurnData> undoStack;
+    protected Stack<TurnData> redoStack;
 
     public TurnController()
     {
@@ -32,13 +33,14 @@ public class TurnController
         this.Clear();
     }
 
-    private UndoRedoData GetData(Player player, List<Player> currentPlayers)
+    private TurnData GetData()
     {
-        return new UndoRedoData()
+        return new TurnData()
         {
-            PlayerIds = currentPlayers.Select(p => p.Id).ToArray(),
-            CurrentPlayerId = player.Id,
-            CurrentPlayerPoints = player.Score
+            PlayerIds = new List<Player>(State.Players).Select(p => p.Id).ToArray(),
+            CurrentPlayerId = State.CurrentPlayer.Id,
+            PlayerPoints = State.Players.ToDictionary(p => p.Id, p => p.Score),
+            Answers = State.Answers == null ? null : new Dictionary<Guid, bool>(State.Answers)
         };
     }
 
@@ -46,9 +48,7 @@ public class TurnController
     {
         this.redoStack.Clear();
 
-        var data = GetData(State.CurrentPlayer, State.Players);
-
-        this.undoStack.Push(data);
+        this.undoStack.Push(GetData());
 
         State.CurrentPlayer.AddPoints(pointsAdded);
 
@@ -87,15 +87,18 @@ public class TurnController
 
     public void Undo()
     {
+        redoStack.Push(GetData());
+
         var data = undoStack.Pop();
-        var turnPlayers = new List<Player>(State.Players);
 
         State.Players = new List<Player>(OriginalPlayers.Where(p => data.PlayerIds.Contains(p.Id)).ToList());
+        State.Answers = data.Answers == null ? null : new Dictionary<Guid, bool>(data.Answers);
 
-        var player = State.Players.First(p => p.Id == data.CurrentPlayerId);
-        redoStack.Push(GetData(player, turnPlayers));
+        foreach (var kvp in data.PlayerPoints)
+        {
+            var player = State.Players.First(p => p.Id == kvp.Key).Score = kvp.Value;
+        }
 
-        player.Score = data.CurrentPlayerPoints;
         State.CurrentPlayerIndex--;
 
         UpdateTurnAndIndex();
@@ -106,15 +109,18 @@ public class TurnController
 
     public void Redo()
     {
-        var data = redoStack.Pop();
-        var turnPlayers = new List<Player>(State.Players);
+        undoStack.Push(GetData());
 
+        var data = redoStack.Pop();
         State.Players = new List<Player>(OriginalPlayers.Where(p => data.PlayerIds.Contains(p.Id)));
 
-        var player = State.Players.First(p => p.Id == data.CurrentPlayerId);
-        undoStack.Push(GetData(player, turnPlayers));
+        State.Answers = data.Answers == null ? null : new Dictionary<Guid, bool>(data.Answers);
 
-        player.Score = data.CurrentPlayerPoints;
+        foreach (var kvp in data.PlayerPoints)
+        {
+            var player = State.Players.First(p => p.Id == kvp.Key).Score = kvp.Value;
+        }
+
         State.CurrentPlayerIndex++;
 
         UpdateTurnAndIndex();
@@ -131,7 +137,7 @@ public class TurnController
 
     public void Clear()
     {
-        this.undoStack = new Stack<UndoRedoData>();
-        this.redoStack = new Stack<UndoRedoData>();
+        this.undoStack = new Stack<TurnData>();
+        this.redoStack = new Stack<TurnData>();
     }
 }
