@@ -9,10 +9,8 @@ using UnityEngine.UI;
 public class SuddenDeathManager : GameManager
 {
     [SerializeField]
-    private int maxRounds;
-    private int rounds;
-    [SerializeField]
-    private Text roundsText;
+    private int maxTurns;
+    private int currentTurn;
 
     private bool gameOver;
     private bool backToMenu;
@@ -26,8 +24,9 @@ public class SuddenDeathManager : GameManager
         base.Start();
 
         state.Answers = new Dictionary<Guid, bool>();
+        this.maxTurns = 3;
 
-        UpdateRoundsText();
+        UpdateTurnsText();
     }
 
     private void Update()
@@ -61,8 +60,8 @@ public class SuddenDeathManager : GameManager
     {
         if (this.turnController.CanUndo() && state.CurrentPlayerIndex == 0)
         {
-            rounds--;
-            UpdateRoundsText();
+            currentTurn--;
+            UpdateTurnsText();
         }
 
         base.Undo();
@@ -75,8 +74,8 @@ public class SuddenDeathManager : GameManager
     {
         if (this.turnController.CanRedo() && state.CurrentPlayerIndex == state.Players.Count - 1)
         {
-            rounds++;
-            UpdateRoundsText();
+            currentTurn++;
+            UpdateTurnsText();
         }
 
         base.Redo();
@@ -90,8 +89,8 @@ public class SuddenDeathManager : GameManager
         if (state.CurrentPlayerIndex != 0 || state.Answers.Count != state.Players.Count)
             return;
 
-        rounds++;
-        UpdateRoundsText();
+        currentTurn++;
+        UpdateTurnsText();
 
         if (IsGameComplete())
         {
@@ -115,10 +114,7 @@ public class SuddenDeathManager : GameManager
         CreateTags();
     }
 
-    private void UpdateRoundsText()
-    {
-        roundsText.text = $"Round {rounds + 1}/{maxRounds}";
-    }
+    private void UpdateTurnsText() => roundsText.text = $"sUDdNEN DeATH\r\nTurn {currentTurn + 1}/{maxTurns}";
 
     private void RemoveTags()
     {
@@ -128,7 +124,7 @@ public class SuddenDeathManager : GameManager
 
     private bool IsGameComplete()
     {
-        if (rounds < maxRounds)
+        if (currentTurn < maxTurns)
             return false;
 
         var topScore = state.Players.OrderByDescending(p => p.Score).First().Score;

@@ -21,6 +21,9 @@ public class MenuManager : MonoBehaviour
     private ColumnPositioning labelPositioning;
     [SerializeField]
     private int maxPlayers;
+    [SerializeField]
+    private Text roundCountText;
+    private int totalRounds = 3;
 
     private GameState state;
 
@@ -30,6 +33,7 @@ public class MenuManager : MonoBehaviour
         this.state = GlobalControl.Instance.turnController.State;
 
         CreatePlayerLabels();
+        UpdateRoundCountText();
     }
 
     private void CreatePlayerLabels()
@@ -100,18 +104,22 @@ public class MenuManager : MonoBehaviour
         RefreshPlayerLabels();
     }
 
+    public void EditRoundCount(int roundsToAdd)
+    {
+        totalRounds += roundsToAdd;
+        totalRounds = Mathf.Max(1, totalRounds);
+
+        UpdateRoundCountText();
+    }
+
+    private void UpdateRoundCountText() => roundCountText.text = totalRounds.ToString();
+
     public void StartGame()
     {
         GlobalControl.Instance.turnController.State = this.state;
         GlobalControl.Instance.NewGame = true;
-        GlobalControl.LoadScene(SceneHelper.GetStandardScene());
-    }
 
-    public void StartSuddenDeath()
-    {
-        GlobalControl.Instance.turnController.State = this.state;
-        GlobalControl.Instance.NewGame = true;
-        GlobalControl.LoadScene(SceneHelper.GetSuddenDeathScene());
+        GlobalControl.Instance.roundController.NewGame(totalRounds);
     }
 
     public void QuitGame()

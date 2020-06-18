@@ -2,7 +2,7 @@
 
 public static class SceneHelper
 {
-    private static Scenes[] StandardScenes
+    public static Scenes[] StandardScenes
     {
         get
         {
@@ -15,7 +15,7 @@ public static class SceneHelper
         }
     }
 
-    private static Scenes[] SuddenDeathScenes {
+    public static Scenes[] SuddenDeathScenes {
         get
         {
             return new Scenes[]

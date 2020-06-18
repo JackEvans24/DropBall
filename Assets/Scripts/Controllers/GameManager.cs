@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour
     protected GameObject scoreTag;
 
     protected GameObject overlay;
+    [SerializeField]
+    protected Text roundsText;
 
     [SerializeField]
     protected float scoreX;
@@ -26,6 +29,7 @@ public class GameManager : MonoBehaviour
     protected float scoreYGap;
 
     protected TurnController turnController;
+    protected RoundController roundController;
     protected GameState state;
 
     protected bool tokenInPlay;
@@ -33,6 +37,7 @@ public class GameManager : MonoBehaviour
     protected void Start()
     {
         this.turnController = GlobalControl.Instance.turnController;
+        this.roundController = GlobalControl.Instance.roundController;
         this.state = turnController.State;
 
         if (GlobalControl.Instance.NewGame) {
@@ -43,6 +48,7 @@ public class GameManager : MonoBehaviour
         }
 
         overlay = GetComponentInChildren<Canvas>().gameObject;
+        roundsText.text = roundController.GetRoundsText();
 
         tokenSpawnParticles = GetComponentInChildren<ParticleSystem>();
         tokenSpawnParticles.transform.position = tokenSpawn.position;
@@ -163,11 +169,7 @@ public class GameManager : MonoBehaviour
         Gizmos.DrawWireSphere(new Vector3(scoreX, scoreY, 0), 1f);
     }
 
-    public void StartSuddenDeath()
-    {
-        GlobalControl.Instance.NewGame = true;
-        GlobalControl.LoadScene(SceneHelper.GetSuddenDeathScene());
-    }
+    public void NextRound() => GlobalControl.Instance.roundController.NextRound();
 
     public void Quit()
     {

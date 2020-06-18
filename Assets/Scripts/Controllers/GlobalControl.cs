@@ -9,6 +9,7 @@ public class GlobalControl : MonoBehaviour
     public static GlobalControl Instance;
 
     public TurnController turnController;
+    public RoundController roundController;
 
     public bool NewGame;
 
@@ -27,6 +28,7 @@ public class GlobalControl : MonoBehaviour
             Instance = this;
 
             this.turnController = new TurnController();
+            this.roundController = new RoundController();
 
             CreateStandardPlayers();
         }
