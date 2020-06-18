@@ -169,7 +169,7 @@ public class GameManager : MonoBehaviour
         Gizmos.DrawWireSphere(new Vector3(scoreX, scoreY, 0), 1f);
     }
 
-    public void NextRound() => GlobalControl.Instance.roundController.NextRound();
+    public void NextRound() => GlobalControl.Instance.roundController.ShowScores();
 
     public void Quit()
     {

@@ -32,10 +32,14 @@ public class RoundController
         gameScenes = SceneHelper.StandardScenes.OrderBy(s => rnd.Next()).ToArray();
     }
 
-    public void NextRound()
+    public void ShowScores()
     {
         this.currentRoundIndex++;
+        GlobalControl.LoadScene(Scenes.Scores);
+    }
 
+    public void NextRound()
+    {
         if (gameComplete)
         {
             StartSuddenDeath();

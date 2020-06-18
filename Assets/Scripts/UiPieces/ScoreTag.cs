@@ -8,9 +8,9 @@ public class ScoreTag : MonoBehaviour
     public Player player;
 
     [SerializeField]
-    private SpriteRenderer background;
+    private Image background;
     [SerializeField]
-    private SpriteRenderer turnMarker;
+    private Image turnMarker;
     [SerializeField]
     private Text nameLabel;
     [SerializeField]
