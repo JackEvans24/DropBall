@@ -9,6 +9,7 @@ TagManager:
   - PlayerSettingLabel
   - Undo
   - Redo
+  - Token
   layers:
   - Default
   - TransparentFX

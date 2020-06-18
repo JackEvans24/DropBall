@@ -104,14 +104,14 @@ public class MenuManager : MonoBehaviour
     {
         GlobalControl.Instance.turnController.State = this.state;
         GlobalControl.Instance.NewGame = true;
-        GlobalControl.LoadScene(Scenes.BoardOne);
+        GlobalControl.LoadScene(SceneHelper.GetStandardScene());
     }
 
     public void StartSuddenDeath()
     {
         GlobalControl.Instance.turnController.State = this.state;
         GlobalControl.Instance.NewGame = true;
-        GlobalControl.LoadScene(Scenes.BoardOne_SuddenDeath);
+        GlobalControl.LoadScene(SceneHelper.GetSuddenDeathScene());
     }
 
     public void QuitGame()

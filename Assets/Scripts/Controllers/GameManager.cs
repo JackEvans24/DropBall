@@ -8,11 +8,14 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]
     protected GameObject token;
+    protected ParticleSystem tokenSpawnParticles;
+    [SerializeField]
+    protected float tokenWaitMin = 0.0f, tokenWaitMax = 3.0f;
     [SerializeField]
     protected Transform tokenSpawn;
     [SerializeField]
     protected GameObject scoreTag;
-    [SerializeField]
+
     protected GameObject overlay;
 
     [SerializeField]
@@ -38,6 +41,11 @@ public class GameManager : MonoBehaviour
 
             turnController.NewGame(this.state);
         }
+
+        overlay = GetComponentInChildren<Canvas>().gameObject;
+
+        tokenSpawnParticles = GetComponentInChildren<ParticleSystem>();
+        tokenSpawnParticles.transform.position = tokenSpawn.position;
 
         CreateTags();
 
@@ -89,10 +97,12 @@ public class GameManager : MonoBehaviour
         return GameObject.Instantiate(scoreTag, instPos, Quaternion.identity);
     }
 
-    public void SpawnToken(Vector3 spawnPos)
+    public IEnumerator SpawnToken(Vector3 spawnPos)
     {
         if (tokenInPlay)
-            return;
+            yield break;
+
+        tokenSpawnParticles.Play();
 
         var tokenScript = token.GetComponent<Token>();
         tokenScript.tokenColor = state.CurrentPlayer.Colour;
@@ -100,13 +110,19 @@ public class GameManager : MonoBehaviour
 
         tokenInPlay = true;
 
+        yield return new WaitForSeconds(Random.Range(tokenWaitMin, tokenWaitMax));
+
         GameObject.Instantiate(token, spawnPos, Quaternion.identity);
+        tokenSpawnParticles.Stop();
     }
 
     public virtual void Play()
     {
         overlay.SetActive(false);
-        SpawnToken(tokenSpawn.position);
+
+        SpikeManager.StartTurn();
+
+        StartCoroutine(SpawnToken(tokenSpawn.position));
     }
 
     public virtual void FinishTurn(int pointsAdded)
@@ -150,7 +166,7 @@ public class GameManager : MonoBehaviour
     public void StartSuddenDeath()
     {
         GlobalControl.Instance.NewGame = true;
-        GlobalControl.LoadScene(Scenes.BoardOne_SuddenDeath);
+        GlobalControl.LoadScene(SceneHelper.GetSuddenDeathScene());
     }
 
     public void Quit()
