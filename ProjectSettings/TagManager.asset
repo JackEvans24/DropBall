@@ -7,6 +7,9 @@ TagManager:
   - Background
   - GameManager
   - PlayerSettingLabel
+  - Undo
+  - Redo
+  - Token
   layers:
   - Default
   - TransparentFX

@@ -505,6 +505,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0871d6ea20afbb94bac0a167934af7c5, type: 2}
   - {fileID: 11400000, guid: b17012b4fac223c4a943b2aa017326a9, type: 2}
   - {fileID: 11400000, guid: 448da7210cfc79045a468ba2bd58ea77, type: 2}
+  - {fileID: 11400000, guid: a962b65d567bff24fa018e68e4e48054, type: 2}
+  - {fileID: 11400000, guid: 740c5c807affc754490d7e179f3c1215, type: 2}
+  - {fileID: 11400000, guid: 41e496b1cbeef874b8a9b1c6924bf78e, type: 2}
+  - {fileID: 11400000, guid: ccb027ab13d4eca48803cfa29eb6a399, type: 2}
+  - {fileID: 11400000, guid: 13152aa9df3d7f64994a81ea7a7c17e4, type: 2}
+  - {fileID: 11400000, guid: 0086228be8277594bb6faa091ffd5354, type: 2}
   soundDropdown: {fileID: 4640845054340805689}
   mainPanel: {fileID: 4640845056049214631}
   openCloseDuration: 0.4
